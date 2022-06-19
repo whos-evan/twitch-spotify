@@ -15,7 +15,9 @@ To prevent spammers there is a 120 second cooldown, there is also a check to ens
 3. Copy the client id and client secret and paste them into a ``.env`` file.
 4. Go to https://twitchtokengenerator.com/ and generate your token.
 5. Set the prefix and channel that you want to join.
-6. Have fun getting DMCAed!
+6. Install the ``requirements.txt``
+7. Run the program!
+8. Have fun getting DMCAed!
 
 
 ## About DMCA...
