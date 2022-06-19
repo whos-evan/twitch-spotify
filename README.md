@@ -10,10 +10,12 @@ There is one command ``?rq`` however it has different ways that you can use it:
 To prevent spammers there is a 120 second cooldown, there is also a check to ensure that the streamer is live before you can make a song request.
 
 ## To get started:
-1. Go to https://developer.spotify.com/dashboard/applications and create an application. Copy the client id and client secret and paste them in the ``.env`` file.
-2. Go to https://twitchtokengenerator.com/ and generate your token.
-3. Set the prefix and channel that you want to join.
-4. Have fun getting DMCAed!
+1. Copy the ``example.env`` file and rename it to ``.env``.
+2. Go to https://developer.spotify.com/dashboard/applications and create an application. Ensure that you set the redirect url to ``http://localhost:8080/callback``
+3. Copy the client id and client secret and paste them into a ``.env`` file.
+4. Go to https://twitchtokengenerator.com/ and generate your token.
+5. Set the prefix and channel that you want to join.
+6. Have fun getting DMCAed!
 
 
 ## About DMCA...
