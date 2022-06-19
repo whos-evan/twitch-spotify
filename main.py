@@ -38,10 +38,10 @@ class Bot(commands.Bot):
         print(f'User id is | {self.user_id}')
         
     @commands.command()
-    @commands.cooldown(rate=1, per=10, bucket=commands.Bucket.user)
+    @commands.cooldown(rate=1, per=120, bucket=commands.Bucket.user)
     async def rq(self, ctx: commands.Context, *, song: str = None):
         if song is None:
-            await ctx.send(f"{ctx.author.name} Command format is `?rq <song> | <artist>` or `?rq <song>` or `?rq <spotify_url>`")
+            await ctx.send(f"{ctx.author.name} Command format is `{prefix}rq <song> | <artist>` or `{prefix}rq <song>` or `{prefix}rq <spotify_url>`")
             return
         
         stream = await self.fetch_streams(user_logins=[f'{channel}'])
