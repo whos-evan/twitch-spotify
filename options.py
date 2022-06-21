@@ -10,6 +10,8 @@ import spotipy.util as util
 import twitchio
 from twitchio.ext import commands
 
+import asyncio
+
 load_dotenv() # loads the .env env variables
 
 spotify_client_id = os.environ.get("SPOTIFY_CLIENT_ID")
@@ -46,8 +48,8 @@ class Bot(commands.Bot):
             await ctx.send(f"{ctx.author.name} Command format is `{prefix}sq <song> [number]` or `{prefix}sq <spotify_url>`")
             return
         
-        stream = await self.fetch_streams(user_logins=[f'{channel}'])
-        if stream is not None:
+        stream = await self.fetch_streams(user_logins=[f'HasanAbi'])
+        if stream:
             try:
                 now = datetime.now()
 
@@ -71,22 +73,27 @@ class Bot(commands.Bot):
                     current_time = now.strftime("%H:%M:%S")
                     print(f'{ctx.author.name} Added {name} by {artist} to the queue at {current_time}!')
                 else:
-                    try:
-                        number = int(song[-1])
-                    except:
-                        number = None
-                    print(number)
-                    if number is None:
-                        result = sp.search(q=f'track:{song}', type='track,artist', limit=4)
+                    result = sp.search(q=f'track:{song}', type='track,artist', limit=4)
+                    if result['tracks']['total'] != 0:
                         choices, ids, songs = return_song_choice(result)
+                        
+                        await ctx.reply(f'{choices} - Please reply with your choice in 30 seconds.')
 
-                        await ctx.reply(choices)
+                        def check(m):
+                            return m.author.name == ctx.author.name and int(m.content) in range(len(songs))
+                        try:
+                            response = await self.wait_for(event='message', timeout=30.0, predicate=check)
+
+                            for i in range(len(ids)):
+                                if response[0].content == str(i):
+                                    sp.add_to_queue(ids[i])
+                                    await ctx.reply(f'Added {songs[i]} to the queue!')
+                            
+                            print(f'{ctx.author.name} Added {songs[int(response[0].content)]} to the queue!')
+                        except asyncio.TimeoutError:
+                            return
                     else:
-                        result = sp.search(q=f'track:{song[:-1]}', type='track,artist', limit=4)
-                        choices, ids, songs = return_song_choice(result)
-                        await ctx.reply(f'{songs[number]} added to the queue!')
-                        sp.add_to_queue(ids[number])
-
+                        await ctx.reply(f'No results found for {song}.')
             except Exception as e:
                 print(f'Error: {e}')
                 await ctx.send(f'{ctx.author.name} requested a song that I could not find!')
