@@ -1,5 +1,4 @@
 import os
-from queue import Empty
 from dotenv import load_dotenv, find_dotenv
 
 import spotipy
